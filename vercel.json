@@ -10,7 +10,7 @@
       "config": { "maxLambdaSize": "25mb" }
     },
     {
-      "src": "park",
+      "src": "static",
       "use": "@now/static-builder",
       "config": { "zeroConfig": true }
     }
