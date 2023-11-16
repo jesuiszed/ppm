@@ -2,22 +2,31 @@
   "scripts": {
     "build": "pip install -r requirements.txt && python manage.py collectstatic --noinput",
     "start": "gunicorn park.wsgi:application -c gunicorn_config.py"
-  },
+  }
+  
   "version": 2,
   "builds": [
     {
-      "src": "park",
-      "use": "@now/python",
-      "config": { "maxLambdaSize": "25mb" }
+      "src": "park/wsgi.py",
+      "use": "@vercel/python",
+      "config": { "maxLambdaSize": "15mb", "runtime": "python3.9" }
     },
     {
-      "src": "ppm",
-      "use": "@now/static-builder",
-      "config": { "zeroConfig": true }
+      "src": "build_files.sh",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "staticfiles"
+      }
     }
   ],
   "routes": [
-    { "handle": "filesystem" },
-    { "src": "/.*", "dest": "gunicorn_config.py" }
+    {
+      "src": "/static/(.*)",
+      "dest": "/static/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "<projectname>/wsgi.py"
+    }
   ]
 }
