@@ -1,0 +1,259 @@
+{% extends 'admin/index.html' %} {% block cp %}
+<title>Liste des réservations</title>
+<div class="main-content">
+  <div class="main-content-header">
+    <h2 class="tab-name">Liste des réservations en attentes</h2>
+  </div>
+  <div class="table-container">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Activité</th>
+          <th>Date de réservation</th>
+          <th>Date de l'activité</th>
+          <th>Nom du client</th>
+          <th>Email du client</th>
+          <th>Téléphone du client</th>
+          <th>Nombre de participants</th>
+          <th>Statut</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for reservation in reservations %}
+        <tr>
+          <td>{{ reservation.activite.nom }}</td>
+          <td>{{ reservation.date_reservation }}</td>
+          <td>{{ reservation.date_activite }}</td>
+          <td>{{ reservation.nom_client }}</td>
+          <td>{{ reservation.email_client }}</td>
+          <td>{{ reservation.telephone_client }}</td>
+          <td>{{ reservation.nombre_participants }}</td>
+          <td>{{ reservation.get_statut_display }}</td>
+          <td>
+            <div class="table-action-btns">
+              <button
+                class="table-action-btn table-modify-action-btn"
+                onclick="showModifyDialog('{{ reservation.date_activite }}', '{{ reservation.nom_client }}', '{{ reservation.email_client }}', '{{ reservation.telephone_client }}', '{{ reservation.nombre_participants }}', '{{ reservation.reservation_id }}', '{{ reservation.statut }}')"
+              >
+                <i class="fa-solid fa-pen"></i>
+              </button>
+              <button
+                class="table-action-btn table-delete-action-btn"
+                onclick="showDeleteConfirmation('{{ reservation.date_activite }}', '{{ reservation.reservation_id }}')"
+              >
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div id="modifyDialog" class="dialog-container">
+    <div class="dialog">
+      <h2>Modifier la réservation</h2>
+      <form method="post">
+        {% csrf_token %}
+        <input
+          type="hidden"
+          id="modify_reservation_id"
+          name="reservation_id"
+          value=""
+        />
+        <label for="nouvelle_date_activite">Nouvelle date de l'activité:</label>
+        <input
+          type="datetime-local"
+          id="nouvelle_date_activite"
+          name="nouvelle_date_activite"
+          required
+        />
+        <label for="nouveau_nom_client">Nouveau nom du client:</label>
+        <input
+          type="text"
+          id="nouveau_nom_client"
+          name="nouveau_nom_client"
+          required
+        />
+        <label for="nouvel_email_client">Nouvel email du client:</label>
+        <input
+          type="email"
+          id="nouvel_email_client"
+          name="nouvel_email_client"
+          required
+        />
+        <label for="nouveau_telephone_client"
+          >Nouveau téléphone du client:</label
+        >
+        <input
+          type="text"
+          id="nouveau_telephone_client"
+          name="nouveau_telephone_client"
+          required
+        />
+        <label for="nouveau_nombre_participants"
+          >Nouveau nombre de participants:</label
+        >
+        <input
+          type="number"
+          id="nouveau_nombre_participants"
+          name="nouveau_nombre_participants"
+          required
+        />
+        <label for="nouveau_statut">Nouveau statut:</label>
+        <select id="nouveau_statut" name="nouveau_statut" required>
+          <option value="en_attente">En Attente</option>
+          <option value="validee">Validée</option>
+          <option value="annulee">Annulée</option>
+        </select>
+        <div class="dialog-btn-container">
+          <button
+            type="button"
+            onclick="closeDialog('modifyDialog')"
+            name="annuler"
+          >
+            <i class="fa-solid fa-xmark"></i>&nbsp; Annuler
+          </button>
+          <button type="submit" name="modifier">
+            <i class="fa-solid fa-check"></i>&nbsp;Modifier
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="deleteConfirmationDialog" class="dialog-container">
+    <div class="dialog">
+      <h2 id="deleteConfirmationMessage">Supprimer cette réservation ?</h2>
+      <form method="post">
+        {% csrf_token %}
+        <input
+          type="hidden"
+          id="delete_reservation_id"
+          name="reservation_id"
+          value=""
+        />
+        <div class="dialog-btn-container">
+          <button
+            type="button"
+            onclick="closeDialog('deleteConfirmationDialog')"
+            name="annuler"
+          >
+            <i class="fa-solid fa-xmark"></i>&nbsp; Annuler
+          </button>
+          <button type="submit" name="supprimer">
+            <i class="fa-solid fa-check"></i>&nbsp;Confirmer
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="addDialog" class="dialog-container">
+    <div class="dialog">
+      <h2>Ajouter une réservation</h2>
+      <form method="post">
+        {% csrf_token %}
+        <label for="activite">Activité:</label>
+        <select id="activite" name="activite" required>
+          {% for activite in activites %}
+          <option value="{{ activite.activite_id }}">{{ activite.nom }}</option>
+          {% endfor %}
+        </select>
+        <label for="date_activite">Date de l'activité:</label>
+        <input
+          type="datetime-local"
+          id="date_activite"
+          name="date_activite"
+          required
+        />
+        <label for="nom_client">Nom du client:</label>
+        <input type="text" id="nom_client" name="nom_client" required />
+        <label for="email_client">Email du client:</label>
+        <input type="email" id="email_client" name="email_client" required />
+        <label for="telephone_client">Téléphone du client:</label>
+        <input
+          type="text"
+          id="telephone_client"
+          name="telephone_client"
+          required
+        />
+        <label for="nombre_participants">Nombre de participants:</label>
+        <input
+          type="number"
+          id="nombre_participants"
+          name="nombre_participants"
+          required
+        />
+        <label for="statut">Statut:</label>
+        <select id="statut" name="statut" required>
+          <option value="en_attente">En Attente</option>
+          <option value="validee">Validée</option>
+          <option value="annulee">Annulée</option>
+        </select>
+        <div class="dialog-btn-container">
+          <button
+            type="button"
+            onclick="closeDialog('addDialog')"
+            name="annuler"
+          >
+            <i class="fa-solid fa-xmark"></i>&nbsp; Annuler
+          </button>
+          <button type="submit" name="ajouter">
+            <i class="fa-solid fa-check"></i>&nbsp; Ajouter
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  function showDialog(dialogId) {
+    const dialog = document.getElementById(dialogId);
+    dialog.style.display = "block";
+  }
+
+  function closeDialog(dialogId) {
+    const dialog = document.getElementById(dialogId);
+    dialog.style.display = "none";
+  }
+
+  function showModifyDialog(
+    date_activite,
+    nom_client,
+    email_client,
+    telephone_client,
+    nombre_participants,
+    reservationId,
+    statut
+  ) {
+    document.getElementById("modify_reservation_id").value = reservationId;
+    document.getElementById("nouvelle_date_activite").value =
+      date_activite.replace(" ", "T");
+    document.getElementById("nouveau_nom_client").value = nom_client;
+    document.getElementById("nouvel_email_client").value = email_client;
+    document.getElementById("nouveau_telephone_client").value =
+      telephone_client;
+    document.getElementById("nouveau_nombre_participants").value =
+      nombre_participants;
+    document.getElementById("nouveau_statut").value = statut;
+    showDialog("modifyDialog");
+  }
+
+  function showDeleteConfirmation(date_activite, reservationId) {
+    document.getElementById("delete_reservation_id").value = reservationId;
+    const confirmationMessage = document.getElementById(
+      "deleteConfirmationMessage"
+    );
+    confirmationMessage.textContent = `Supprimer la réservation du ${date_activite} ?`;
+    showDialog("deleteConfirmationDialog");
+  }
+
+  function showAddDialog() {
+    showDialog("addDialog");
+  }
+</script>
+{% endblock %}

@@ -1,0 +1,195 @@
+{% extends 'admin/index.html' %}
+
+{% block cp %}
+<title>Gestion des employés</title>
+<div class="main-content">
+    <div class="content-box">
+        <div class="content-header">
+            <h2 class="content-name">Gestion des employés</h2>
+            <div style="display: flex; flex-direction: row; flex-wrap: nowrap">
+                <div>
+                    <button class="add-btn" onclick="showAddDialog()">
+                        <i class="fa-solid fa-plus"></i>&nbsp;Ajouter un employé
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="contact-container" class="contact-container">
+            {% for employe in employes %}
+            <div class="contact-card">
+                <div class="menu-option-container">
+                    <div class="menu-option-content">
+                        <i class="fa-solid fa-ellipsis"></i>
+                        <div class="option-menu">
+                            <div class="modify-option">
+                                <button
+                                    onclick="showModifyDialog('{{ employe.employe_id }}', '{{ employe.nom }}', '{{ employe.statut }}', '{{ employe.email_employee }}', '{{ employe.telephone }}', '{{ employe.image.url }}')"
+                                >
+                                    <i class="fa-solid fa-pen"></i>&emsp;<span>Modifier</span>
+                                </button>
+                            </div>
+                            <div class="delete-option">
+                                <button
+                                    onclick="showDeleteConfirmation('{{ employe.employe_id }}', '{{ employe.nom }}')"
+                                >
+                                    <i class="fa-solid fa-trash"></i>&emsp;<span>Supprimer</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="contact-photo">
+                    <img
+                        src="{{ employe.image.url }}"
+                        alt="{{ employe.nom }}"
+                        title="{{ employe.nom }}"
+                    />
+                </div>
+                <div class="contact-identity">
+                    <div class="contact-name">{{ employe.nom }}</div>
+                    <div class="contact-work">{{ employe.statut }}</div>
+                </div>
+                <div class="contact-info">
+                    <div class="contact-info-email">
+                        <span class="contact-label">Email</span>
+                        <h6 class="contact-email">{{ employe.email_employee }}</h6>
+                    </div>
+                    <div class="contact-info-phone">
+                        <span class="contact-label">Téléphone</span>
+                        <h6 class="contact-phone">{{ employe.telephone }}</h6>
+                    </div>
+                </div>
+                <div class="contact-join">
+                    <div class="contact-join-btn contact-send-message-btn">
+                        <a
+                            href="mailto:{{ employe.email_employee }}"
+                            class="contact-btn"
+                        >
+                            <i class="fas fa-envelope"></i>&ensp;<span>Courrier</span>
+                        </a>
+                    </div>
+                    <div class="contact-join-btn contact-call-btn">
+                        <button class="contact-btn" onclick="">
+                            <i class="fas fa-phone"></i>&ensp;<span>Appeler</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div id="modifyDialog" class="dialog-container">
+        <div class="dialog">
+            <h2>Modifier l'employé</h2>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="hidden" id="modify_employe_id" name="employe_id" value="" />
+                <label for="modify_nom">Nom:</label>
+                <input type="text" id="modify_nom" name="nom" value="" />
+                <label for="modify_image">Image:</label>
+                <input type="file" id="modify_image" name="image" accept="image/*" />
+                <label for="modify_statut">Statut:</label>
+                <input type="text" id="modify_statut" name="statut" value="" />
+                <label for="modify_email">Email:</label>
+                <input type="email" id="modify_email" name="email" value="" />
+                <label for="modify_telephone">Téléphone:</label>
+                <input type="tel" id="modify_telephone" name="telephone" value="" />
+                <div class="dialog-btn-container">
+                    <button type="button" onclick="closeDialog('modifyDialog')" name="annuler">
+                        <i class="fa-solid fa-xmark"></i>&nbsp; Annuler
+                    </button>
+                    <button type="submit" name="modifier">
+                        <i class="fa-solid fa-check"></i>&nbsp; Modifier
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="deleteConfirmationDialog" class="dialog-container">
+        <div class="dialog">
+            <h2 id="deleteConfirmationMessage">Supprimer cet employé ?</h2>
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" id="delete_employe_id" name="employe_id" value="" />
+                <div class="dialog-btn-container">
+                    <button type="button" onclick="closeDialog('deleteConfirmationDialog')" name="annuler">
+                        <i class="fa-solid fa-xmark"></i>&nbsp; Annuler
+                    </button>
+                    <button type="submit" name="supprimer">
+                        <i class="fa-solid fa-check"></i>&nbsp; Confirmer
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="addDialog" class="dialog-container">
+        <div class="dialog">
+            <h2>Ajouter un employé</h2>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %} {{ form }}
+                <div class="dialog-btn-container">
+                    <button type="button" onclick="closeDialog('addDialog')" name="annuler">
+                        <i class="fa-solid fa-xmark"></i>&nbsp; Annuler
+                    </button>
+                    <button type="submit" name="ajouter">
+                        <i class="fa-solid fa-check"></i>&nbsp; Ajouter
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showDialog(dialogId) {
+        const dialog = document.getElementById(dialogId);
+        dialog.style.display = "block";
+    }
+
+    function closeDialog(dialogId) {
+        const dialog = document.getElementById(dialogId);
+        dialog.style.display = "none";
+    }
+
+    function showModifyDialog(employeId, nom, statut, email, telephone, imageUrl) {
+        const modifyDialog = document.getElementById("modifyDialog");
+        const modifyEmployeIdInput = document.getElementById("modify_employe_id");
+        const modifyNomInput = document.getElementById("modify_nom");
+        const modifyStatutInput = document.getElementById("modify_statut");
+        const modifyEmailInput = document.getElementById("modify_email");
+        const modifyTelephoneInput = document.getElementById("modify_telephone");
+        const modifyImageInput = document.getElementById("modify_image");
+
+        // Populate form fields with employee data
+        modifyEmployeIdInput.value = employeId;
+        modifyNomInput.value = nom;
+        modifyStatutInput.value = statut;
+        modifyEmailInput.value = email;
+        modifyTelephoneInput.value = telephone;
+
+        // Show the modify dialog
+        showDialog("modifyDialog");
+    }
+
+    function showDeleteConfirmation(employeId, nom) {
+        const deleteConfirmationDialog = document.getElementById("deleteConfirmationDialog");
+        const deleteEmployeIdInput = document.getElementById("delete_employe_id");
+        const deleteConfirmationMessage = document.getElementById("deleteConfirmationMessage");
+
+        // Populate the confirmation message with employee name
+        deleteConfirmationMessage.textContent = `Supprimer "${nom}" ?`;
+
+        // Set the employeId in the hidden input
+        deleteEmployeIdInput.value = employeId;
+
+        showDialog("deleteConfirmationDialog");
+    }
+
+    function showAddDialog() {
+        showDialog("addDialog");
+    }
+</script>
+{% endblock %}

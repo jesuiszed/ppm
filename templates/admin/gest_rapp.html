@@ -1,0 +1,345 @@
+{% extends 'admin/index.html' %} {% block cp %}
+<title>Gestion des Statistiques et Rapports</title>
+<div class="main-content">
+  <div class="main-content-header">
+    <h2 class="tab-name">Gestion des Statistiques et Rapports</h2>
+  </div>
+  <div class="content-box">
+    <div class="content-header">
+      <h2 class="content-name">Liste des Statistiques</h2>
+      <button class="add-btn" onclick="showAddStatDialog()">
+        <i class="fa-solid fa-plus"></i> &nbsp; Ajouter un statistique
+      </button>
+    </div>
+    <div class="table-container">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Nom de l'activite</th>
+            <th>participants</th>
+            <th>Date</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for statistique in statistiques %}
+          <tr>
+            <td>{{ statistique.activite }}</td>
+            <td>{{ statistique.participants }}</td>
+            <td>{{ statistique.date }}</td>
+            <td>
+              <div class="table-action-btns">
+                <button
+                  class="table-action-btn table-modify-action-btn"
+                  onclick="showModifyDialog('{{ statistique.id }}', '{{ statistique.activite }}', '{{ statistique.participants }}', '{{ statistique.date }}')"
+                >
+                  <i class="fa-solid fa-pen"></i>
+                </button>
+                <button
+                  class="table-action-btn table-delete-action-btn"
+                  onclick="showDeleteConfirmation('{{ statistique.id }}')"
+                >
+                  <i class="fa-solid fa-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="modifyStatDialog" class="dialog-container">
+    <div class="dialog">
+      <h2>Modifier la Statistique</h2>
+      <form method="post">
+        {% csrf_token %}
+        <input type="hidden" id="modify_stat_id" name="stat_id" value="" />
+        <label for="nouveau_nom_stat">Nouveau Nom:</label>
+        <input
+          type="text"
+          id="nouveau_nom_stat"
+          name="nouveau_nom_stat"
+          required
+        />
+        <label for="nouvelle_valeur_stat">Nouvelle Valeur:</label>
+        <input
+          type="number"
+          id="nouvelle_valeur_stat"
+          name="nouvelle_valeur_stat"
+          required
+        />
+        <div class="dialog-btn-container">
+          <button
+            type="button"
+            onclick="closeDialog('modifyStatDialog')"
+            name="annuler"
+          >
+            <i class="fa-solid fa-xmark"></i>&nbsp; Annuler
+          </button>
+          <button type="submit" name="modifier_statistique">
+            <i class="fa-solid fa-check"></i>&nbsp;Modifier
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="deleteStatConfirmationDialog" class="dialog-container">
+    <div class="dialog">
+      <h2 id="deleteStatConfirmationMessage">Supprimer cette statistique ?</h2>
+      <form method="post">
+        {% csrf_token %}
+        <input type="hidden" id="delete_stat_id" name="stat_id" value="" />
+        <div class="dialog-btn-container">
+          <button
+            type="button"
+            onclick="closeDialog('deleteStatConfirmationDialog')"
+            name="annuler"
+          >
+            <i class="fa-solid fa-xmark"></i>&nbsp; Annuler
+          </button>
+          <button type="submit" name="supprimer_statistique">
+            <i class="fa-solid fa-check"></i>&nbsp;Confirmer
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="addStatDialog" class="dialog-container">
+    <div class="dialog">
+      <h2>Ajouter une statistique</h2>
+      <form method="post">
+        {% csrf_token %} {{ statistique_form }}
+        <div class="dialog-btn-container">
+          <button
+            type="button"
+            onclick="closeDialog('addStatDialog')"
+            name="annuler"
+          >
+            <i class="fa-solid fa-xmark"></i>&nbsp; Annuler
+          </button>
+          <button type="submit" name="ajouter_statistique">
+            <i class="fa-solid fa-check"></i>&nbsp; Ajouter
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Tableau des Rapports -->
+  <div class="content-box">
+    <div class="content-header">
+      <h2 class="content-name">Liste des Rapports</h2>
+      <div>
+        <button class="add-btn" onclick="showAddRapDialog()">
+          <i class="fa-solid fa-plus"></i> &nbsp; Ajouter un rapport
+        </button>
+      </div>
+    </div>
+    <div class="table-container">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Nom l'activite</th>
+            <th>Date</th>
+            <th>contenu</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for rapport in rapports %}
+          <tr>
+            <td>{{ rapport.activite }}</td>
+            <td>{{ rapport.date }}</td>
+            <td>{{ rapport.contenu }}</td>
+            <td>
+              <div class="table-action-btns">
+                <button
+                  class="table-action-btn table-modify-action-btn"
+                  onclick="showModifyDialog('{{ statistique.id }}', '{{ statistique.activite }}', '{{ statistique.participants }}', '{{ statistique.date }}')"
+                >
+                  <i class="fa-solid fa-pen"></i>
+                </button>
+                <button
+                  class="table-action-btn table-delete-action-btn"
+                  onclick="showDeleteRapConfirmation('{{ rapport.id }}')"
+                >
+                  <i class="fa-solid fa-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="modifyRapDialog" class="dialog-container">
+    <div class="dialog">
+      <h2>Modifier le rapport</h2>
+      <form method="post">
+        {% csrf_token %}
+        <input type="hidden" id="modify_rap_id" name="rap_id" value="" />
+        <label for="nouveau_nom_rap">Nouveau Nom:</label>
+        <input
+          type="text"
+          id="nouveau_nom_rap"
+          name="nouveau_nom_rap"
+          required
+        />
+        <label for="nouvelle_date_rap">Nouvelle Date:</label>
+        <input
+          type="text"
+          id="nouvelle_date_rap"
+          name="nouvelle_date_rap"
+          required
+        />
+        <div class="dialog-btn-container">
+          <button
+            type="button"
+            onclick="closeDialog('modifyRapDialog')"
+            name="annuler"
+          >
+            <i class="fa-solid fa-xmark"></i>&nbsp; Annuler
+          </button>
+          <button type="submit" name="modifier_rapport">
+            <i class="fa-solid fa-check"></i>&nbsp;Modifier
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="deleteRapConfirmationDialog" class="dialog-container">
+    <div class="dialog">
+      <h2 id="deleteRapConfirmationMessage">Supprimer ce rapport ?</h2>
+      <form method="post">
+        {% csrf_token %}
+        <input type="hidden" id="delete_rap_id" name="rap_id" value="" />
+        <div class="dialog-btn-container">
+          <button
+            type="button"
+            onclick="closeDialog('deleteRapConfirmationDialog')"
+            name="annuler"
+          >
+            <i class="fa-solid fa-xmark"></i>&nbsp; Annuler
+          </button>
+          <button type="submit" name="supprimer_rapport">
+            <i class="fa-solid fa-check"></i>&nbsp;Confirmer
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="addRapDialog" class="dialog-container">
+    <div class="dialog">
+      <h2>Ajouter un rapport</h2>
+      <form method="post">
+        {% csrf_token %} {{ rapport_form }}
+        <div class="dialog-btn-container">
+          <button
+            type="button"
+            onclick="closeDialog('addRapDialog')"
+            name="annuler"
+          >
+            <i class="fa-solid fa-xmark"></i>&nbsp; Annuler
+          </button>
+          <button type="submit" name="ajouter_rapport">
+            <i class="fa-solid fa-check"></i>&nbsp; Ajouter
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Fonction pour afficher la boîte de dialogue de modification des statistiques
+  function showModifyDialog(id, activite, participants, date) {
+    // Récupérer la boîte de dialogue de modification
+    var modifyStatDialog = document.getElementById("modifyStatDialog");
+
+    // Remplir les champs de la boîte de dialogue avec les données de la statistique
+    document.getElementById("modify_stat_id").value = id;
+    document.getElementById("nouveau_nom_stat").value = activite;
+    document.getElementById("nouvelle_valeur_stat").value = participants;
+
+    // Afficher la boîte de dialogue
+    modifyStatDialog.style.display = "block";
+  }
+
+  // Fonction pour afficher la boîte de dialogue de confirmation de suppression des statistiques
+  function showDeleteConfirmation(id) {
+    // Récupérer la boîte de dialogue de confirmation de suppression
+    var deleteStatConfirmationDialog = document.getElementById(
+      "deleteStatConfirmationDialog"
+    );
+
+    // Remplir le champ caché avec l'ID de la statistique à supprimer
+    document.getElementById("delete_stat_id").value = id;
+
+    // Afficher la boîte de dialogue de confirmation de suppression
+    deleteStatConfirmationDialog.style.display = "block";
+  }
+
+  // Fonction pour fermer une boîte de dialogue
+  function closeDialog(dialogId) {
+    // Récupérer la boîte de dialogue par son ID
+    var dialog = document.getElementById(dialogId);
+
+    // Cacher la boîte de dialogue
+    dialog.style.display = "none";
+  }
+
+  // Fonction pour afficher la boîte de dialogue d'ajout de statistiques
+  function showAddStatDialog() {
+    // Récupérer la boîte de dialogue d'ajout de statistiques
+    var addStatDialog = document.getElementById("addStatDialog");
+
+    // Afficher la boîte de dialogue d'ajout de statistiques
+    addStatDialog.style.display = "block";
+  }
+
+  // Fonction pour afficher la boîte de dialogue de modification des rapports
+  function showModifyRapDialog(id, activite, date) {
+    // Récupérer la boîte de dialogue de modification des rapports
+    var modifyRapDialog = document.getElementById("modifyRapDialog");
+
+    // Remplir les champs de la boîte de dialogue avec les données du rapport
+    document.getElementById("modify_rap_id").value = id;
+    document.getElementById("nouveau_nom_rap").value = activite;
+    document.getElementById("nouvelle_date_rap").value = date;
+
+    // Afficher la boîte de dialogue de modification des rapports
+    modifyRapDialog.style.display = "block";
+  }
+
+  // Fonction pour afficher la boîte de dialogue de confirmation de suppression des rapports
+  function showDeleteRapConfirmation(id) {
+    // Récupérer la boîte de dialogue de confirmation de suppression des rapports
+    var deleteRapConfirmationDialog = document.getElementById(
+      "deleteRapConfirmationDialog"
+    );
+
+    // Remplir le champ caché avec l'ID du rapport à supprimer
+    document.getElementById("delete_rap_id").value = id;
+
+    // Afficher la boîte de dialogue de confirmation de suppression des rapports
+    deleteRapConfirmationDialog.style.display = "block";
+  }
+
+  // Fonction pour afficher la boîte de dialogue d'ajout de rapports
+  function showAddRapDialog() {
+    // Récupérer la boîte de dialogue d'ajout de rapports
+    var addRapDialog = document.getElementById("addRapDialog");
+
+    // Afficher la boîte de dialogue d'ajout de rapports
+    addRapDialog.style.display = "block";
+  }
+</script>
+{% endblock %}
