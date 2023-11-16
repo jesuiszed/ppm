@@ -1,0 +1,52 @@
+/* styles spécifiques pour la gestion des activités */
+
+/* Styles pour les boutons */
+button {
+  padding: 5px 10px;
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+/* Styles pour les boîtes de dialogue */
+.ui-dialog {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.ui-dialog-titlebar {
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  border-radius: 5px 5px 0 0;
+}
+
+.ui-dialog-content {
+  padding: 20px;
+}
+
+/* Styles pour la liste des activités */
+ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+li {
+  margin-bottom: 10px;
+}
+
+/* Styles pour les liens "Modifier" et "Supprimer" */
+.modifier-btn,
+.supprimer-btn {
+  margin-left: 10px;
+  text-decoration: none;
+  color: #3498db;
+}
+
+/* Styles pour les liens au survol */
+.modifier-btn:hover,
+.supprimer-btn:hover {
+  text-decoration: underline;
+}

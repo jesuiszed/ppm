@@ -1,0 +1,101 @@
+/*:root {*/
+/*  --darkPaper: #111936;*/
+/*  --darkBgColor: #1a223f;*/
+/*  --darkLevel1: #262f4d;*/
+/*  --darkLevel2: #29314f;*/
+/*  --darkLevel3: #212946;*/
+/*  --darkPrimaryLight: #eef2f6;*/
+/*  --darkPrimaryMain: #2196f3;*/
+/*  --darkSecondaryLight: #d1c4e9;*/
+/*  --darkSecondaryMain: #7c4dff;*/
+/*  --darkTextTitle: #d7dcec;*/
+/*  --darkTextPrimary: #bdc8f0;*/
+/*  --darkTextSecondary: #8492c4;*/
+/*  --darkSecondary: #8492c4;*/
+/*  --darkGray100: #eef2f6;*/
+/*  --darkGray300: #cdd5df;*/
+/*  --successMain: #00e676;*/
+/*  --errorMain: #f44336;*/
+/*  --orangeMain: #ffab91;*/
+/*  --warningMain: #ffe57f;*/
+/*}*/
+
+/*!* Basic styling *!*/
+/*.content-box-container {*/
+/*  width: 100%;*/
+/*  display: flex;*/
+/*  flex-direction: column;*/
+/*  !* align-items: center; *!*/
+/*}*/
+
+/*#id_password {*/
+/*  display: none;*/
+/*}*/
+
+/*.modify-info-form > .helptext, .modify-info-form > div,*/
+/*.modify-mail-form > .helptext, .modify-mail-form > div,*/
+/*.modify-info-form > label:not([for="id_username"]),*/
+/*.modify-mail-form > label:not([for="id_password"]){*/
+/*  display: none;*/
+/*}*/
+
+/*.form-container {*/
+/*  display: flex;*/
+/*}*/
+
+/*.form-container form label[for="id_username"],*/
+/*.form-container form label[for="id_password"] {*/
+/*  display: block;*/
+/*  margin-bottom: 10px;*/
+/*  font-weight: 500;*/
+/*  font-size: 15px;*/
+/*  color: var(--darkSecondary);*/
+/*}*/
+
+/*.form-container * {*/
+/*  display: block;*/
+/*}*/
+
+/*.form-container form input[for="id_username"],*/
+/*.form-container form input[for="id_password"] {*/
+/*  width: 350px;*/
+/*  padding: 15px;*/
+/*  border: none;*/
+/*  outline: solid 1px var(--darkTextPrimary);*/
+/*  border-radius: 5px;*/
+/*  margin-bottom: 20px;*/
+/*  color: var(--darkGray300);*/
+/*  background-color: var(--darkLevel1);*/
+/*}*/
+
+/*.form-container form input:focus {*/
+/*  border: none;*/
+/*  outline: solid 2px var(--darkPrimaryMain);*/
+/*}*/
+
+/*.form-container form button {*/
+/*  padding: 10px;*/
+/*  outline: none;*/
+/*  border: none;*/
+/*  color: var(--darkPaper);*/
+/*  cursor: pointer;*/
+/*  border-radius: 3px;*/
+/*  font-size: 14px;*/
+/*  font-weight: 500;*/
+/*  margin-top: 25px;*/
+/*  background-color: #2196f3;*/
+/*}*/
+
+/*.form-container form button:hover {*/
+/*  background-color: #4aa9f7;*/
+/*}*/
+
+/*.messages.success {*/
+/*  background-color: var(--successMain);*/
+/*  color: white;*/
+/*}*/
+
+/*.messages.error {*/
+/*  background-color: var(--errorMain);*/
+/*  color: white;*/
+/*}*/

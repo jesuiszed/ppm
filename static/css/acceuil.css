@@ -1,0 +1,106 @@
+:root {
+  /* Color Variables */
+  --darkPaper: #111936;
+  --darkBgColor: #1a223f;
+  --darkLevel1: #262f4d;
+  --darkLevel2: #29314f;
+  --darkLevel3: #212946;
+  --darkPrimaryLight: #eef2f6;
+  --darkPrimaryMain: #2196f3;
+  --darkSecondaryLight: #d1c4e9;
+  --darkSecondaryMain: #7c4dff;
+  --darkTextTitle: #d7dcec;
+  --darkTextPrimary: #bdc8f0;
+  --darkTextSecondary: #8492c4;
+  --darkSecondary: #8492c4;
+  --darkGray100: #eef2f6;
+  --darkGray300: #cdd5df;
+  --successMain: #00e676;
+  --errorMain: #f44336;
+  --orangeMain: #ffab91;
+  --warningMain: #ffe57f;
+}
+
+/* Body Styles */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: var(--darkBgColor);
+  color: var(--darkTextPrimary);
+}
+
+/* Container Styles */
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* Form Container Styles */
+.form-container {
+  background-color: var(--darkPaper);
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 400px;
+}
+
+/* Title Styles */
+.title {
+  color: var(--darkTextTitle);
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+/* Form Styles */
+.forms {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+/* Form Switching Styles */
+.hidden {
+  display: none;
+}
+
+/* Button Styles */
+button {
+  background-color: var(--darkPrimaryMain);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 13px;
+  cursor: pointer;
+  margin-top: 15px;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: var(--darkSecondaryMain);
+}
+
+.connexion-form form input {
+  height: 35px;
+  font-size: 13px;
+  outline: none;
+  border: solid 1px black;
+  border-radius: 4px;
+  padding-left: 5px;
+}
+
+p label {
+  margin-right: 8px;
+}
+
+p {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: end;
+}
+

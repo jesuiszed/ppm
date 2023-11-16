@@ -1,0 +1,89 @@
+/* Reset some default styles */
+body, html {
+  margin: 0;
+  padding: 0;
+}
+
+/* Main layout */
+.container {
+  display: flex;
+  height: 100vh;
+}
+
+.sidebar {
+  width: 250px;
+  background-color: #1877f2;
+  color: white;
+  padding-top: 20px;
+}
+
+.sidebar a {
+  color: white;
+  text-decoration: none;
+  display: block;
+  padding: 10px 20px;
+  transition: background-color 0.3s ease;
+}
+
+.sidebar a:hover {
+  background-color: #1565c0;
+}
+
+.main-content {
+  flex: 1;
+  padding: 20px;
+}
+
+/* Page header */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.page-title {
+  font-size: 24px;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.user-name {
+  font-weight: bold;
+}
+
+/* Cards */
+.card {
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+/* Buttons */
+.btn {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #1877f2;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+  background-color: #1565c0;
+}
