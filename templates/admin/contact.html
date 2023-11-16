@@ -1,0 +1,197 @@
+{% extends 'admin/index.html' %}
+{% block cp %}
+<title>Liste des contacts</title>
+<div class="main-content">
+  <div class="main-content-header">
+    <h2 class="tab-name">Liste contacts</h2>
+    <div>
+      <button class="add-btn" onclick="showAddDialog()">
+        <i class="fa-solid fa-plus"></i>&nbsp;Ajouter un contact
+      </button>
+    </div>
+  </div>
+  <div id="contact-container" class="contact-container">
+    {% for contact in contacts %}
+    <div class="contact-card">
+      {% comment %}
+      <div class="contact-photo contact-photo">
+        <img src="" alt="" />
+      </div>
+      {% endcomment %}
+      <div class="menu-option-container">
+        <div class="menu-option-content">
+          <i class="fa-solid fa-ellipsis"></i>
+          <div class="option-menu">
+            <div class="modify-option">
+              <button
+                onclick="showModifyDialog('{{ contact.contact_id }}', '{{ contact.nom }}', '{{ contact.email }}', '{{ contact.role }}')"
+              >
+                <i class="fa-solid fa-pen"></i>&emsp;<span>Modifier</span>
+              </button>
+            </div>
+            <div class="delete-option">
+              <button
+                onclick="showDeleteConfirmation('{{ contact.nom }}', '{{ contact.contact_id }}')"
+              >
+                <i class="fa-solid fa-trash"></i>&emsp;<span>Supprimer</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="contact-identity">
+        <div class="contact-name">{{ contact.nom }}</div>
+        <div class="contact-work">{{ contact.role }}</div>
+      </div>
+      <div class="contact-info">
+        <div class="contact-info-email">
+          <span class="contact-label contact-label">Email</span>
+          <h6 class="contact-email">{{ contact.email }}</h6>
+        </div>
+        <div class="contact-info-phone">
+          <span class="contact-label contact-label">Téléphone</span>
+          <h6 class="contact-phone">Null</h6>
+        </div>
+      </div>
+      <div class="contact-join">
+        <div class="contact-join-btn contact-send-message-btn">
+          <a href="mailto:{{ contact.email }}" class="contact-btn contact-btn"
+            ><i class="fas fa-solid fa-envelope"></i>&ensp;<span
+              >Courrier</span
+            ></a
+          >
+        </div>
+        <div class="contact-join-btn contact-call-btn">
+          <button class="contact-btn contact-btn" onclick="">
+            <i class="fas fa-solid fa-phone"></i>&ensp;<span>Appeler</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<div id="viewDialog" class="dialog-container">
+  <div class="dialog">
+    <h2>Details du contact</h2>
+    <p><strong>Nom :</strong> <span id="view_nom"></span></p>
+    <p><strong>Email :</strong> <span id="view_email"></span></p>
+    <p><strong>Role :</strong> <span id="view_role"></span></p>
+    <button onclick="closeDialog('viewDialog')">Fermer</button>
+  </div>
+</div>
+
+<div id="modifyDialog" class="dialog-container">
+  <div class="dialog">
+    <h2>Modifier le contact</h2>
+    <form method="post">
+      {% csrf_token %}
+      <input type="hidden" id="modify_contact_id" name="contact_id" value="" />
+      <label for="nouveau_nom">Nouveau nom:</label>
+      <input type="text" id="nouveau_nom" name="nouveau_nom" required />
+      <label for="nouvel_email">Nouvel email:</label>
+      <input type="email" id="nouvel_email" name="nouvel_email" required />
+      <label for="nouveau_role">Nouveau role:</label>
+      <input type="text" id="nouveau_role" name="nouveau_role" required />
+      <div class="dialog-btn-container">
+        <button
+          type="button"
+          onclick="closeDialog('modifyDialog')"
+          name="annuler"
+        >
+          <i class="fa-solid fa-xmark"></i>&nbsp; Annuler
+        </button>
+        <button type="submit" name="modifier">
+          <i class="fa-solid fa-check"></i>&nbsp;Modifier
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div id="deleteConfirmationDialog" class="dialog-container">
+  <div class="dialog">
+    <h2 id="deleteConfirmationMessage">Suppression du contact</h2>
+    <form method="post">
+      {% csrf_token %}
+      <input type="hidden" id="delete_contact_id" name="contact_id" value="" />
+      <div class="dialog-btn-container">
+        <button
+          type="button"
+          onclick="closeDialog('deleteConfirmationDialog')"
+          name="annuler"
+        >
+          <i class="fa-solid fa-xmark"></i>&nbsp; Annuler
+        </button>
+        <button type="submit" name="supprimer">
+          <i class="fa-solid fa-check"></i>&nbsp;Confirmer
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div id="addDialog" class="dialog-container">
+  <div class="dialog">
+    <h2>Nouveau contact</h2>
+    <form method="post">
+      {% csrf_token %}
+      <label for="nouveau_nom">Nom:</label>
+      <input type="text" id="nouveau_nom" name="nouveau_nom" required />
+      <label for="nouvel_email">Email:</label>
+      <input type="email" id="nouvel_email" name="nouvel_email" required />
+      <label for="nouveau_role">Role:</label>
+      <input type="text" id="nouveau_role" name="nouveau_role" required />
+      <div class="dialog-btn-container">
+        <button type="button" onclick="closeDialog('addDialog')" name="annuler">
+          <i class="fa-solid fa-xmark"></i>&nbsp; Annuler
+        </button>
+        <button type="submit" name="ajouter">
+          <i class="fa-solid fa-check"></i>&nbsp; Ajouter
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  function showDialog(dialogId) {
+    const dialog = document.getElementById(dialogId);
+    dialog.style.display = "block";
+  }
+
+  function closeDialog(dialogId) {
+    const dialog = document.getElementById(dialogId);
+    dialog.style.display = "none";
+  }
+
+  function showViewDialog(nom, email, role) {
+    document.getElementById("view_nom").textContent = nom;
+    document.getElementById("view_email").textContent = email;
+    document.getElementById("view_role").textContent = role;
+    showDialog("viewDialog");
+  }
+
+  function showModifyDialog(contactId, nom, email, role) {
+    document.getElementById("modify_contact_id").value = contactId;
+    document.getElementById("nouveau_nom").value = nom;
+    document.getElementById("nouvel_email").value = email;
+    document.getElementById("nouveau_role").value = role;
+    showDialog("modifyDialog");
+  }
+
+  function showDeleteConfirmation(nom, contactId) {
+    document.getElementById("delete_contact_id").value = contactId;
+    const confirmationMessage = document.getElementById(
+      "deleteConfirmationMessage"
+    );
+    confirmationMessage.textContent = `Suppression du contact "${nom}"`;
+    showDialog("deleteConfirmationDialog");
+  }
+
+  function showAddDialog() {
+    showDialog("addDialog");
+  }
+</script>
+{% endblock %}

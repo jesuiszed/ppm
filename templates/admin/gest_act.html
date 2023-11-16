@@ -1,0 +1,240 @@
+{% extends 'admin/index.html' %}
+{% block cp %}
+<title>Liste d'activités</title>
+<div class="main-content">
+  <div class="main-content-header">
+    <h2 class="tab-name">Liste d'activités</h2>
+    <div>
+      <button class="add-btn" onclick="showAddDialog()">
+        <i class="fa-solid fa-plus"></i> &nbsp; Ajouter une activité
+      </button>
+    </div>
+  </div>
+  <div class="table-container">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Nom</th>
+          <th>Description</th>
+          <th>Prix</th>
+          <th>Âge minimum</th>
+          <th>Capacité max</th>
+          <th>Image</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for activite in activites %}
+        <tr>
+          <td>{{ activite.nom }}</td>
+          <td>{{ activite.description }}</td>
+          <td>{{ activite.prix }}</td>
+          <td>{{ activite.age_minimum }}</td>
+          <td>{{ activite.capacite_max }}</td>
+          <td><img src="{{ activite.image.url }}" alt="{{ activite.nom }} image" width="100"></td>
+          <td>
+            <div class="table-action-btns">
+              <button
+                class="table-action-btn table-modify-action-btn"
+                onclick="showModifyDialog('{{ activite.activite_id }}', '{{ activite.nom }}', '{{ activite.description }}', '{{ activite.prix }}', '{{ activite.age_minimum }}', '{{ activite.capacite_max }}', '{{ activite.image.url }}')"
+              >
+                <i class="fa-solid fa-pen"></i>
+              </button>
+              <button
+                class="table-action-btn table-delete-action-btn"
+                onclick="showDeleteConfirmation('{{ activite.activite_id }}', '{{ activite.nom }}')"
+              >
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div id="modifyDialog" class="dialog-container">
+    <div class="dialog">
+      <h2>Modifier l'activité</h2>
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input
+          type="hidden"
+          id="modify_activite_id"
+          name="activite_id"
+          value=""
+        />
+        <label for="nouveau_nom">Nouveau nom:</label>
+        <input
+          type="text"
+          id="nouveau_nom"
+          name="nouveau_nom"
+          placeholder="Nouveau nom"
+        />
+        <label for="nouvelle_image">Nouvelle image:</label>
+        <input
+          type="file"
+          id="nouvelle_image"
+          name="nouvelle_image"
+        />
+        <label for="nouvelle_description">Nouvelle description:</label>
+        <textarea
+          id="nouvelle_description"
+          name="nouvelle_description"
+          placeholder="Nouvelle description"
+        ></textarea>
+        <label for="nouveau_prix">Nouveau prix:</label>
+        <input
+          type="text"
+          id="nouveau_prix"
+          name="nouveau_prix"
+          placeholder="Nouveau prix"
+        />
+        <label for="nouvel_age_minimum">Nouvel âge minimum:</label>
+        <input
+          type="text"
+          id="nouvel_age_minimum"
+          name="nouvel_age_minimum"
+          placeholder="Nouvel âge minimum"
+        />
+        <label for="nouvelle_capacite_max">Nouvelle capacité max:</label>
+        <input
+          type="text"
+          id="nouvelle_capacite_max"
+          name="nouvelle_capacite_max"
+          placeholder="Nouvelle capacité max"
+        />
+        <div class="dialog-btn-container">
+          <button type="button" onclick="closeDialog('modifyDialog')" name="annuler">
+            <i class="fa-solid fa-xmark"></i>&nbsp; Annuler
+          </button>
+          <button type="submit" name="modifier">
+            <i class="fa-solid fa-check"></i>&nbsp;Modifier
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="deleteConfirmationDialog" class="dialog-container">
+    <div class="dialog">
+      <h2 id="deleteConfirmationMessage">Supprimer cette activité ?</h2>
+      <form method="post">
+        {% csrf_token %}
+        <input
+          type="hidden"
+          id="delete_activite_id"
+          name="activite_id"
+          value=""
+        />
+        <div class="dialog-btn-container">
+          <button
+            type="button"
+            onclick="closeDialog('deleteConfirmationDialog')"
+            name="annuler"
+          >
+            <i class="fa-solid fa-xmark"></i>&nbsp; Annuler
+          </button>
+          <button type="submit" name="supprimer">
+            <i class="fa-solid fa-check"></i>&nbsp;Confirmer
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="addDialog" class="dialog-container">
+    <div class="dialog">
+      <h2>Ajouter une activité</h2>
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %} {{ form }}
+        <div class="dialog-btn-container">
+          <button type="button" onclick="closeDialog('addDialog')" name="annuler">
+            <i class="fa-solid fa-xmark"></i>&nbsp; Annuler
+          </button>
+          <button type="submit" name="ajouter">
+            <i class="fa-solid fa-check"></i>&nbsp; Ajouter
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+// Fonction pour afficher une boîte de dialogue
+function showDialog(dialogId) {
+    const dialog = document.getElementById(dialogId);
+    dialog.style.display = "block";
+}
+
+// Fonction pour fermer une boîte de dialogue
+function closeDialog(dialogId) {
+    const dialog = document.getElementById(dialogId);
+    dialog.style.display = "none";
+}
+
+// Fonction pour afficher la boîte de dialogue de modification avec les données de l'activité
+function showModifyDialog(activiteId, nom, description, prix, ageMinimum, capaciteMax, imageUrl) {
+    const modifyDialog = document.getElementById("modifyDialog");
+    const modifyActiviteIdInput = document.getElementById("modify_activite_id");
+    const modifyNomInput = document.getElementById("nouveau_nom");
+    const modifyImageInput = document.getElementById("nouvelle_image");
+    const modifyDescriptionInput = document.getElementById("nouvelle_description");
+    const modifyPrixInput = document.getElementById("nouveau_prix");
+    const modifyAgeMinimumInput = document.getElementById("nouvel_age_minimum");
+    const modifyCapaciteMaxInput = document.getElementById("nouvelle_capacite_max");
+
+    // Remplir les champs du formulaire avec les données de l'activité
+    modifyActiviteIdInput.value = activiteId;
+    modifyNomInput.value = nom;
+    modifyImageInput.value = ""; // Effacer l'input de fichier pour éviter les problèmes
+    modifyDescriptionInput.value = description;
+    modifyPrixInput.value = prix;
+    modifyAgeMinimumInput.value = ageMinimum;
+    modifyCapaciteMaxInput.value = capaciteMax;
+
+    // Afficher la boîte de dialogue de modification
+    showDialog("modifyDialog");
+}
+
+// Fonction pour afficher la boîte de dialogue de confirmation de suppression
+function showDeleteConfirmation(activiteId, nom) {
+    const deleteConfirmationDialog = document.getElementById("deleteConfirmationDialog");
+    const deleteActiviteIdInput = document.getElementById("delete_activite_id");
+    const deleteConfirmationMessage = document.getElementById("deleteConfirmationMessage");
+
+    // Remplir le message de confirmation avec le nom de l'activité
+    deleteConfirmationMessage.textContent = `Supprimer "${nom}" ?`;
+
+    // Définir l'activiteId dans l'input caché
+    deleteActiviteIdInput.value = activiteId;
+
+    // Afficher la boîte de dialogue de confirmation de suppression
+    showDialog("deleteConfirmationDialog");
+}
+function showAddDialog() {
+    showDialog("addDialog");
+}
+// Fonction pour gérer l'envoi d'une image depuis le formulaire d'ajout
+function handleAddImage() {
+    const addImageInput = document.getElementById("nouvelle_image");
+    const imageFile = addImageInput.files[0];
+
+    // Créer un objet FormData et ajouter le fichier image
+    const formData = new FormData();
+    formData.append("image", imageFile);
+
+    // Envoyer l'objet FormData au serveur (par exemple, via une requête AJAX)
+    // Assurez-vous de configurer le serveur pour gérer l'envoi de fichiers
+    // et de stocker l'image dans la base de données
+
+    // Vous pouvez également afficher un aperçu de l'image avant l'envoi si nécessaire
+}
+
+// Écouter l'événement de changement de l'input de fichier d'ajout
+const addImageInput = document.getElementById("nouvelle_image");
+addImageInput.addEventListener("change", handleAddImage);
+</script>
+{% endblock %}
