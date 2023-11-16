@@ -11,7 +11,7 @@
       "config": { "maxLambdaSize": "25mb" }
     },
     {
-      "src": "static",
+      "src": "ppm",
       "use": "@now/static-builder",
       "config": { "zeroConfig": true }
     }
