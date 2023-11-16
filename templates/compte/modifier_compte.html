@@ -1,0 +1,79 @@
+{% extends "admin/index.html" %}
+
+{% block title %}Gérer le compte{% endblock %}
+
+{% block cp %}
+  <div class="main-content">
+    <div class="main-content-header">
+      <h2 class="tab-name">Modifier Compte</h2>
+    </div>
+    <!-- Messages de succès -->
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <!-- Formulaire de modification du nom d'utilisateur -->
+    <div class="content-box">
+      <div class="content-header">
+        <h2 class="content-name">Modifier le nom d'utilisateur</h2>
+      </div>
+    <div class="form-container">
+    <form method="post" class="modify-info-form">
+        {% csrf_token %}
+        {{ modifier_nom_utilisateur_form }}
+        <button type="submit" name="modifier-username">Enregistrer</button>
+    </form></div></div>
+
+    <!-- Formulaire de modification de l'adresse e-mail -->
+    <div class="content-box">
+      <div class="content-header">
+        <h2 class="content-name">Modifier l'adresse e-mail</h2>
+      </div>
+    <div class="form-container">
+    <form method="post" class="modify-mail-form">
+        {% csrf_token %}
+        {{ modifier_email_form }}
+        <button type="submit" name="modifier-email">Enregistrer</button>
+    </form></div></div>
+
+    <!-- Formulaire de modification du mot de passe -->
+    <div class="content-box">
+      <div class="content-header">
+        <h2 class="content-name">Modifier le mot de passe</h2>
+      </div>
+    <div class="form-container">
+    <form method="post" class="modify-pwd-form">
+        {% csrf_token %}
+        {{ modifier_mot_de_passe_form}}
+        <!-- Commentaires HTML pour cacher les informations de mot de passe -->
+        <!--
+        Mot de passe :
+
+        Aucun mot de passe défini.
+        Les mots de passe ne sont pas enregistrés en clair, ce qui ne permet pas d’afficher le mot de passe de cet utilisateur, mais il est possible de le changer en utilisant ce formulaire. Requis. 150 caractères maximum. Uniquement des lettres, nombres et les caractères « @ », « . », « + », « - » et « _ ».Requis. 150 caractères maximum. Seulement des lettres, nombres et les caractères « @ », « . », « + », « - » et « _ ».Votre mot de passe ne peut pas trop ressembler à vos autres informations personnelles.
+        Votre mot de passe doit contenir au minimum 8 caractères.
+        Votre mot de passe ne peut pas être un mot de passe couramment utilisé.
+        Votre mot de passe ne peut pas être entièrement numérique.
+        -->
+        <button type="submit" name="modifier-password">Enregistrer</button>
+    </form></div></div>
+
+    <!-- Formulaire d'ajout d'utilisateur -->
+    <div class="content-box">
+      <div class="content-header">
+        <h2 class="content-name">Ajouter un nouvel utilisateur</h2>
+      </div>
+    <div class="form-container">
+    <form method="post" class="add-user-form">
+        {% csrf_token %}
+        {{ ajout_utilisateur_form }}
+        <button type="submit" name="ajouter-utilisateur">Ajouter</button>
+    </form>
+    </div>
+    </div>
+  </div>
+{% endblock %}

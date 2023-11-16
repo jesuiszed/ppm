@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Contacts</title>
+</head>
+<body>
+    <h1>Contacts</h1>
+    <ul>
+        {% for contact in contacts %}
+        <li>
+            {{ contact.nom }} - {{ contact.sujet }}
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

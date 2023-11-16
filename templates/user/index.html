@@ -1,0 +1,159 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Activités</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'css/acc euil.css' %}"
+    />
+    <!-- Ajoutez le lien vers la bibliothèque Bootstrap CDN -->
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+  </head>
+  <body>
+    <header>
+      <h1>Bienvenue sur notre site d'activités</h1>
+    </header>
+    <nav>
+      <form method="get" action="{% url 'user:search' %}">
+        <input type="text" name="q" placeholder="Rechercher..." />
+        <button type="submit">Rechercher</button>
+      </form>
+      <form method="get" action="{% url 'user:tri' %}">
+        <label for="sort_by">Trier par :</label>
+        <select id="sort_by" name="sort_by">
+          <option value="default">Choisir...</option>
+          <option value="price">Prix croissant</option>
+          <option value="popularity">Popularité</option>
+        </select>
+        <button type="submit">Appliquer</button>
+      </form>
+    </nav>
+    <main>
+      <h2>Activités disponibles</h2>
+      <ul>
+        {% for activite in activites %}
+        <li class="activity">
+          <h3>{{ activite.nom }}</h3>
+          <img src="{{ activite.image.url }}" alt="{{ activite.nom }}" />
+          <p>{{ activite.description }}</p>
+          <p>Prix : {{ activite.prix }}</p>
+          <button
+            type="button"
+            class="btn btn-primary"
+            data-toggle="modal"
+            data-target="#voirPlus{{ activite.id }}"
+          >
+            Voir plus
+          </button>
+          <button
+            type="button"
+            class="btn btn-success"
+            data-toggle="modal"
+            data-target="#reserver{{ activite.id }}"
+          >
+            Réserver
+          </button>
+        </li>
+        <!-- Modale pour Voir plus -->
+        <div
+          class="modal fade"
+          id="voirPlus{{ activite.id }}"
+          tabindex="-1"
+          role="dialog"
+          aria-labelledby="voirPlusLabel{{ activite.id }}"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="voirPlusLabel{{ activite.id }}">
+                  Détails de {{ activite.nom }}
+                </h5>
+                <button
+                  type="button"
+                  class="close"
+                  data-dismiss="modal"
+                  aria-label="Fermer"
+                >
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <h2>{{ activite.nom }}</h2>
+                <p>{{ activite.description }}</p>
+                <p>Prix : {{ activite.prix }}</p>
+                <!-- Autres détails de l'activité -->
+              </div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-dismiss="modal"
+                >
+                  Fermer
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Modale pour Réserver -->
+        <div
+          class="modal fade"
+          id="reserver{{ activite.id }}"
+          tabindex="-1"
+          role="dialog"
+          aria-labelledby="reserverLabel{{ activite.id }}"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="reserverLabel{{ activite.id }}">
+                  Faire une réservation pour {{ activite.nom }}
+                </h5>
+                <button
+                  type="button"
+                  class="close"
+                  data-dismiss="modal"
+                  aria-label="Fermer"
+                >
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <!-- Formulaire de réservation -->
+                <form method="post">
+                  {% csrf_token %} {{ form }}
+                  <button type="submit">Réserver</button>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-dismiss="modal"
+                >
+                  Fermer
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </ul>
+    </main>
+    <footer>
+      <p>&copy; 2023 Notre Site</p>
+    </footer>
+
+    <!-- Ajoutez les scripts JavaScript de Bootstrap (jQuery et Popper.js) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  </body>
+</html>

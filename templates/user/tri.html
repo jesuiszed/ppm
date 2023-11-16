@@ -1,0 +1,11 @@
+{% extends "user/index.html" %}
+
+{% block content %}
+<h1>Recherche et Tri des Activités</h1>
+<!-- Formulaire de recherche et tri -->
+<ul>
+  {% for activite in activites %}
+    <li><a href="{% url 'user:detail_activite' activite.id %}">{{ activite.nom }}</a></li>
+  {% endfor %}
+</ul>
+{% endblock %}

@@ -1,0 +1,13 @@
+
+    <h1>Rechercher une activité</h1>
+    <form method="get" action="{% url 'user:search' %}">
+        <input type="text" name="q" placeholder="Nom de l'activité">
+        <button type="submit">Rechercher</button>
+    </form>
+    <ul>
+        {% for activite in activites %}
+        <li>
+            <a href="{% url 'user:detail' activite.activite_id %}">{{ activite.nom }}</a> - {{ activite.description }}
+        </li>
+        {% endfor %}
+    </ul>

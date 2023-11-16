@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Détails de l'activité</title>
+</head>
+<body>
+    <h1>Détails de l'activité</h1>
+    <h2>{{ activite.nom }}</h2>
+    <p>{{ activite.description }}</p>
+    <p>Prix : {{ activite.prix }}</p>
+    <!-- Other activity details -->
+    <a href="{% url 'user:reservation' activite.activite_id %}">Réserver</a>
+</body>
+</html>

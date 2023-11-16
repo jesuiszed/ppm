@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Faire une réservation</title>
+  </head>
+  <body>
+    <h1>Faire une réservation pour {{ activite.nom }}</h1>
+    <form method="post">
+      {% csrf_token %} {{ form }}
+      <button type="submit">Réserver</button>
+    </form>
+  </body>
+</html>
