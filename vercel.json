@@ -1,13 +1,17 @@
 {
+  "scripts": {
+    "build": "pip install -r requirements.txt && python manage.py collectstatic --noinput",
+    "start": "gunicorn park.wsgi:application -c gunicorn_config.py"
+  },
   "version": 2,
   "builds": [
     {
-      "src": "path/to/your/app",
+      "src": "park",
       "use": "@now/python",
       "config": { "maxLambdaSize": "25mb" }
     },
     {
-      "src": "ppm",
+      "src": "park",
       "use": "@now/static-builder",
       "config": { "zeroConfig": true }
     }
