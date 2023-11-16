@@ -1,0 +1,19 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "path/to/your/app",
+      "use": "@now/python",
+      "config": { "maxLambdaSize": "25mb" }
+    },
+    {
+      "src": "ppm",
+      "use": "@now/static-builder",
+      "config": { "zeroConfig": true }
+    }
+  ],
+  "routes": [
+    { "handle": "filesystem" },
+    { "src": "/.*", "dest": "gunicorn_config.py" }
+  ]
+}
